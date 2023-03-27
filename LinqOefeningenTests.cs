@@ -1,5 +1,30 @@
 namespace LinqOefeningenTests
 {
+    public class Students
+    {
+        public string? Name { get; set; }
+        public int GradePoint { get; set; }
+        public int Id { get; set; }
+
+        public static List<Students> GtStuRec()
+        {
+            var students = new List<Students>
+        {
+            new Students { Id = 1, Name = " Joseph ", GradePoint = 800 },
+            new Students { Id = 2, Name = "Alex", GradePoint = 458 },
+            new Students { Id = 3, Name = "Harris", GradePoint = 900 },
+            new Students { Id = 4, Name = "Taylor", GradePoint = 900 },
+            new Students { Id = 5, Name = "Smith", GradePoint = 458 },
+            new Students { Id = 6, Name = "Natasa", GradePoint = 700 },
+            new Students { Id = 7, Name = "David", GradePoint = 750 },
+            new Students { Id = 8, Name = "Harry", GradePoint = 700 },
+            new Students { Id = 9, Name = "Nicolash", GradePoint = 597 },
+            new Students { Id = 10, Name = "Jenny", GradePoint = 750 }
+        };
+            return students;
+        }
+    }
+
     public class LinqOefeningenTestSuite
     {
         [Fact]
@@ -105,6 +130,210 @@ namespace LinqOefeningenTests
         {
             List<int> leden = new() { 10, 48, 52, 94, 63 };
             var groterDan = leden.Where(x => x > 59);
+            Assert.Equal(groterDan, new List<int>() { 94, 63 });
         }
+
+        [Fact]
+        public void Opdracht11()
+        {
+            var list = new List<int>
+            {
+                5,
+                7,
+                13,
+                24,
+                6,
+                9,
+                8,
+                7
+            };
+
+            list.Sort();
+            list.Reverse();
+
+            var subList = new List<int>();
+
+            foreach (var p in list.Take(5))
+            {
+                subList.Add(p);
+            }
+        }
+
+        static IEnumerable<string> FilterWord(string s)
+        {
+            var upWord = s.Split(' ')
+                .Where(x => string.Equals(x, x.ToUpper(),
+                    StringComparison.Ordinal));
+
+            return upWord;
+        }
+
+        [Fact]
+        public void Opdracht12()
+        {
+            var ucWord = FilterWord("The UPER CASE words are: ");
+        }
+
+        [Fact]
+        public void Opdracht13()
+        {
+            var arr1 = new string[] { "This", "is", "a", "test" };
+            var s = string.Join(", ", arr1.Select(s => s.ToString()).ToArray());
+        }
+
+        [Fact]
+        public void Opdracht14()
+        {
+            var studentList = Students.GtStuRec();
+            var students = (from stuMast in studentList
+                            group stuMast by stuMast.GradePoint into g
+                            orderby g.Key descending
+                            select new
+                            {
+                                StuRecord = g.ToList()
+                            }).ToList();
+
+            students[2 - 1].StuRecord
+                .ForEach(i => Console.WriteLine(" Id : {0},  Name : {1},  achieved Grade Point : {2}", i.Id, i.Name, i.GradePoint));
+        }
+
+        [Fact]
+        public void Opdracht15()
+        {
+            string[] arr1 = { "aaa.frx", "bbb.TXT", "xyz.dbf", "abc.pdf", "aaaa.PDF", "xyz.frt", "abc.xml", "ccc.txt", "zzz.txt" };
+            var fGrp = arr1.Select(file => Path.GetExtension(file).TrimStart('.').ToLower())
+            .GroupBy(z => z, (fExt, extCtr) => new
+            {
+                Extension = fExt,
+                Count = extCtr.Count()
+            });
+
+            foreach (var m in fGrp)
+                Console.WriteLine("{0} File(s) with {1} Extension ", m.Count, m.Extension); ;
+        }
+
+        [Fact]
+        public void Opdracht16()
+        {
+            var directoryFiles = Directory.GetFiles("c:/windows");
+            var avgFsize = directoryFiles.Select(file => new FileInfo(file).Length).Average();
+            avgFsize = Math.Round(avgFsize / 10, 1);
+        }
+
+        [Fact]
+        public void Opdracht17()
+        {
+            var listOfString = new List<string>
+        {
+            "m",
+            "n",
+            "o",
+            "p",
+            "q"
+        };
+            var result1 = from y in listOfString
+                          select y;
+            var newstr = listOfString.FirstOrDefault(en => en == "o");
+            listOfString.Remove(newstr);
+
+            var result = from z in listOfString
+                         select z;
+        }
+        [Fact]
+        public void Opdracht18()
+        {
+            var listOfString = new List<string>
+        {
+            "m",
+            "n",
+            "o",
+            "p",
+            "q"
+        };
+            var result1 = from y in listOfString
+                          select y;
+            listOfString.Remove(listOfString.FirstOrDefault(en => en == "p"));
+
+
+            var result = from z in listOfString
+                         select z;
+        }
+        [Fact]
+        public void Opdracht19()
+        {
+            var listOfString = new List<string>
+        {
+            "m",
+            "n",
+            "o",
+            "p",
+            "q"
+        };
+            var _result1 = from y in listOfString
+                           select y;
+            listOfString.RemoveAll(en => en == "q");
+
+            var result = from z in listOfString
+                         select z;
+        }
+        [Fact]
+        public void Opdracht20()
+        {
+            var listOfString = new List<string>
+        {
+            "m",
+            "n",
+            "o",
+            "p",
+            "q"
+        };
+            var result1 = from y in listOfString
+                          select y;
+            listOfString.RemoveAt(3);
+
+            var result = from z in listOfString
+                         select z;
+        }
+        [Fact]
+        public void Opdracht21()
+        {
+        }
+        [Fact]
+        public void Opdracht22()
+        {
+        }
+        [Fact]
+        public void Opdracht23()
+        {
+        }
+        [Fact]
+        public void Opdracht24()
+        {
+        }
+        [Fact]
+        public void Opdracht25()
+        {
+        }
+        [Fact]
+        public void Opdracht26()
+        {
+        }
+        [Fact]
+        public void Opdracht27()
+        {
+        }
+        [Fact]
+        public void Opdracht28()
+        {
+        }
+        [Fact]
+        public void Opdracht29()
+        {
+        }
+        [Fact]
+        public void Opdracht30()
+        {
+        }
+
     }
 }
